@@ -8,8 +8,12 @@
 HTTPClient http;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
-const char* ssid = "Tesalia";
-const char* password = "1123581321";
+// const char* ssid = "Tesalia";
+// const char* password = "1123581321";
+
+const char* ssid = "_hoy-no";
+const char* password = "a2h0o1r7a/";
+
 int statuss = 0;
 int out = 0;
  
@@ -54,8 +58,14 @@ void loop() {
         content.concat(String(mfrc522.uid.uidByte[i], HEX));
       }
       content.toUpperCase();
-      http.begin("http://192.168.40.24/api/v1/alumnos/registro");  //Specify request destination
-      String datos = "rfid="+content+",accion=entrada";
+      Serial.println("");
+
+      http.begin("http://192.168.1.73/api/v1/alumnos/registro");  //Specify request destination
+      http.addHeader("Content-Type", "application/json");
+      String datos = "{\"rfid\":\""+content+"\",\"accion\":\"entrada\"}";
+
+      Serial.println(datos);
+
       int httpCode = http.POST(datos);                                                                  //Send the request
     
       if (httpCode > 0) { //Check the returning code
@@ -64,7 +74,7 @@ void loop() {
       }
       
       http.end();
-      Serial.println();
+      Serial.println("");
     //  if (content.substring(1) == "04 C0 0A 7A 83 57 80") //change UID of the card that you want to give access
     //  {
     //    Serial.println(" Access Granted ");
